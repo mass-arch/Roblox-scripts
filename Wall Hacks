@@ -2,10 +2,10 @@ local HighlightColor = Color3.fromRGB(255, 255, 0)
 local OutlineColor = Color3.fromRGB(255, 0, 0)     
 local AdorneePartName = "HumanoidRootPart"         
 
--- Get the Players service
+
 local Players = game:GetService("Players")
 
--- Function to create and apply a highlight to a character
+
 local function applyHighlight(character)
   -- Check if the character exists and has the specified adornee part
   local adorneePart = character:FindFirstChild(AdorneePartName)
@@ -54,7 +54,7 @@ Players.PlayerAdded:Connect(function(player)
   end)
 end)
 
--- Apply highlights to players already in the game when the script starts
+
 for _, player in ipairs(Players:GetPlayers()) do
   if player.Character then
     applyHighlight(player.Character)
