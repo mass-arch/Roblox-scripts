@@ -1,0 +1,64 @@
+local HighlightColor = Color3.fromRGB(255, 255, 0) 
+local OutlineColor = Color3.fromRGB(255, 0, 0)     
+local AdorneePartName = "HumanoidRootPart"         
+
+-- Get the Players service
+local Players = game:GetService("Players")
+
+-- Function to create and apply a highlight to a character
+local function applyHighlight(character)
+  -- Check if the character exists and has the specified adornee part
+  local adorneePart = character:FindFirstChild(AdorneePartName)
+  if adorneePart and character:FindFirstChildOfClass("Humanoid") then
+    -- Check if a highlight already exists to prevent duplicates
+    if not adorneePart:FindFirstChild("PlayerHighlight") then
+      -- Create a new Highlight instance
+      local highlight = Instance.new("Highlight")
+      highlight.Name = "PlayerHighlight" -- Give it a unique name
+      highlight.FillColor = HighlightColor
+      highlight.OutlineColor = OutlineColor
+      highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop -- Makes it visible through other objects
+      highlight.Adornee = adorneePart -- Attach the highlight to the HumanoidRootPart
+      highlight.Parent = adorneePart -- Parent the highlight to the adornee part
+      print("Applied highlight to: " .. character.Name)
+    end
+  end
+end
+
+-- Function to remove a highlight from a character
+local function removeHighlight(character)
+  local adorneePart = character:FindFirstChild(AdorneePartName)
+  if adorneePart then
+    local highlight = adorneePart:FindFirstChild("PlayerHighlight")
+    if highlight then
+      highlight:Destroy()
+      print("Removed highlight from: " .. character.Name)
+    end
+  end
+end
+
+-- Connect to the PlayerAdded event to highlight new players
+Players.PlayerAdded:Connect(function(player)
+  -- Connect to the CharacterAdded event for each player
+  player.CharacterAdded:Connect(function(character)
+    -- Wait a short moment to ensure the character is fully loaded
+    task.wait(0.5)
+    applyHighlight(character)
+  end)
+
+  -- Connect to the PlayerRemoving event to clean up highlights when a player leaves
+  player.PlayerRemoving:Connect(function()
+    if player.Character then
+      removeHighlight(player.Character)
+    end
+  end)
+end)
+
+-- Apply highlights to players already in the game when the script starts
+for _, player in ipairs(Players:GetPlayers()) do
+  if player.Character then
+    applyHighlight(player.Character)
+  end
+end
+
+print("Player Highlighter script initialized.")
