@@ -25,7 +25,7 @@ local function applyHighlight(character)
   end
 end
 
--- Function to remove a highlight from a character
+
 local function removeHighlight(character)
   local adorneePart = character:FindFirstChild(AdorneePartName)
   if adorneePart then
@@ -37,7 +37,7 @@ local function removeHighlight(character)
   end
 end
 
--- Connect to the PlayerAdded event to highlight new players
+
 Players.PlayerAdded:Connect(function(player)
   -- Connect to the CharacterAdded event for each player
   player.CharacterAdded:Connect(function(character)
@@ -46,7 +46,7 @@ Players.PlayerAdded:Connect(function(player)
     applyHighlight(character)
   end)
 
-  -- Connect to the PlayerRemoving event to clean up highlights when a player leaves
+
   player.PlayerRemoving:Connect(function()
     if player.Character then
       removeHighlight(player.Character)
